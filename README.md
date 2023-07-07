@@ -1,4 +1,3 @@
-```markdown
 # (WIP) Task Management Application
 
 The Task Management Application is a web-based application built with Spring Boot and React. It allows users to manage their tasks, track progress, and collaborate effectively.
