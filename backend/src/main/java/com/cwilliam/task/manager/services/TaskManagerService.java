@@ -7,7 +7,7 @@ import com.cwilliam.task.manager.repositories.TaskRepository;
 import com.cwilliam.task.manager.repositories.UserRepository;
 import com.cwilliam.task.manager.services.exceptions.DataBaseException;
 import com.cwilliam.task.manager.services.exceptions.ResourceNotFoundException;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TaskManagerService {
 
     private final TaskRepository taskRepository;
@@ -25,20 +25,18 @@ public class TaskManagerService {
 
     public Page<TaskDto> findAll(Pageable pageable){
         Page<Task> tasks = taskRepository.findAll(pageable);
-        return tasks.map(t -> new TaskDto(t));
+        return tasks.map(TaskDto::new);
     }
 
     public TaskDto findById(Long taskId){
         var task = taskRepository.findById(taskId).orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
-        var dto = new TaskDto(task);
-        return dto;
+        return new TaskDto(task);
     }
 
     public TaskDto createTask(TaskDto taskDto){
         Task task = entityToDto(taskDto);
         taskRepository.save(task);
-        var dto = new TaskDto(task);
-        return dto;
+        return new TaskDto(task);
     }
 
     public void deleteTask(Long id){

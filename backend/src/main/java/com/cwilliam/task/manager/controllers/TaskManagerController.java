@@ -1,9 +1,8 @@
 package com.cwilliam.task.manager.controllers;
 
-import com.cwilliam.task.manager.entities.Task;
 import com.cwilliam.task.manager.entities.TaskDto;
 import com.cwilliam.task.manager.services.TaskManagerService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/taskManager")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TaskManagerController {
 
     private final TaskManagerService service;
@@ -23,8 +22,8 @@ public class TaskManagerController {
 
     @GetMapping("/{id}")
     private ResponseEntity<TaskDto> getTaskById(@PathVariable String id){
-        Integer taskId = Integer.valueOf(id);
-        TaskDto dto = service.findById(taskId.longValue());
+        int taskId = Integer.parseInt(id);
+        TaskDto dto = service.findById((long) taskId);
         return ResponseEntity.ok().body(dto);
     }
 
@@ -35,16 +34,16 @@ public class TaskManagerController {
 
     @PutMapping("/{id}")
     private ResponseEntity<TaskDto> updateTask(@PathVariable String id, @RequestBody TaskDto task){
-        Integer taskId = Integer.valueOf(id);
+        int taskId = Integer.parseInt(id);
 
-        return ResponseEntity.ok().body(service.updateTask(taskId.longValue(), task));
+        return ResponseEntity.ok().body(service.updateTask((long) taskId, task));
     }
 
     @DeleteMapping("/{id}")
     private ResponseEntity<Void> deleteTask(@PathVariable String id){
-        Integer taskId = Integer.valueOf(id);
+        int taskId = Integer.parseInt(id);
 
-        service.deleteTask(taskId.longValue());
+        service.deleteTask((long) taskId);
         return ResponseEntity.noContent().build();
     }
 }
