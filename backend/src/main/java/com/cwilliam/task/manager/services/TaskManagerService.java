@@ -7,14 +7,15 @@ import com.cwilliam.task.manager.repositories.TaskRepository;
 import com.cwilliam.task.manager.repositories.UserRepository;
 import com.cwilliam.task.manager.services.exceptions.DataBaseException;
 import com.cwilliam.task.manager.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class TaskManagerService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
     public Page<TaskDto> findAll(Pageable pageable){
         Page<Task> tasks = taskRepository.findAll(pageable);
@@ -34,7 +36,7 @@ public class TaskManagerService {
     }
 
     public TaskDto createTask(TaskDto taskDto){
-        Task task = entityToDto(taskDto);
+        Task task = modelMapper.map(taskDto, Task.class);
         taskRepository.save(task);
         return new TaskDto(task);
     }
@@ -64,18 +66,5 @@ public class TaskManagerService {
         } catch (EntityNotFoundException e){
             throw new ResourceNotFoundException("Id not found" + taskId);
         }
-    }
-
-    private Task entityToDto(TaskDto dto){
-        Task task = new Task();
-        task.setDone(dto.isDone());
-        task.setDescription(dto.getDescription());
-        task.setTitle(dto.getTitle());
-        task.setStatus(dto.getStatus());
-        task.setPriority(dto.getPriority());
-        task.setDeadline(dto.getDeadline());
-        User user = userRepository.findById(dto.getAssignedUserId()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        task.setAssignedUser(user);
-        return task;
     }
 }

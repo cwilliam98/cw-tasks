@@ -2,12 +2,9 @@ package com.cwilliam.task.manager.entities;
 
 import com.cwilliam.task.manager.entities.enums.Priority;
 import com.cwilliam.task.manager.entities.enums.Status;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 @Getter
@@ -15,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "tb_tasks")
+@Builder
 public class Task {
 
     @Id
