@@ -1,4 +1,4 @@
-package com.cwilliam.task.manager.services.impl;
+package com.cwilliam.task.manager.services.tasks.impl;
 
 import com.cwilliam.task.manager.entities.Task;
 import com.cwilliam.task.manager.entities.TaskDto;

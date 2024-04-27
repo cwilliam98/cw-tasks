@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: /api/taskManager
+    context-path: /api/v1
 
 spring:
   datasource:
@@ -19,3 +19,7 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
+oauth:
+  token:
+    signing:
+        key: TVktSldULVNFQ1JFVC1CTEEtQkxBLUJMQS1CTEEtQkxBLUJMQQ==

@@ -1,7 +1,9 @@
 package com.cwilliam.task.manager.controllers;
 
 import com.cwilliam.task.manager.entities.TaskDto;
-import com.cwilliam.task.manager.services.TaskManagerService;
+import com.cwilliam.task.manager.entities.User;
+import com.cwilliam.task.manager.services.oauth.AuthenticationService;
+import com.cwilliam.task.manager.services.tasks.impl.TaskManagerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -14,11 +16,22 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Task Manager", description = "Task Manager API")
 @RestController
+@RequestMapping("/tasks")
 @RequiredArgsConstructor
 public class TaskManagerController {
 
     private final TaskManagerService service;
 
+    @Operation(
+            summary = "Insert a task",
+            description = "Insert a task in data source")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation")
+    })
+    @PostMapping
+    private ResponseEntity<TaskDto> createTask(@RequestBody TaskDto task){
+        return ResponseEntity.ok().body(service.createTask(task));
+    }
     @Operation(
             summary = "Fetch all tasks",
             description = "fetches all tasks entities and their data from data source")
@@ -42,16 +55,7 @@ public class TaskManagerController {
         TaskDto dto = service.findById((long) taskId);
         return ResponseEntity.ok().body(dto);
     }
-    @Operation(
-            summary = "Insert a task",
-            description = "Insert a task in data source")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation")
-    })
-    @PostMapping
-    private ResponseEntity<TaskDto> createTask(@RequestBody TaskDto task){
-        return ResponseEntity.ok().body(service.createTask(task));
-    }
+
     @Operation(
             summary = "Edit a task by ID",
             description = "Edit a task in data source")

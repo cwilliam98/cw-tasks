@@ -1,13 +1,10 @@
 package com.cwilliam.task.manager.services;
 
 import com.cwilliam.task.manager.builder.Factory;
-import com.cwilliam.task.manager.entities.Task;
-import com.cwilliam.task.manager.entities.TaskDto;
-import com.cwilliam.task.manager.entities.User;
-import com.cwilliam.task.manager.entities.enums.Priority;
 import com.cwilliam.task.manager.repositories.TaskRepository;
 import com.cwilliam.task.manager.repositories.UserRepository;
 import com.cwilliam.task.manager.services.exceptions.ResourceNotFoundException;
+import com.cwilliam.task.manager.services.tasks.impl.TaskManagerService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
