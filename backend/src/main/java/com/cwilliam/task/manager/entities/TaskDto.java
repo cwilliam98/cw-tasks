@@ -5,6 +5,8 @@ import com.cwilliam.task.manager.entities.enums.Status;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,6 +14,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class TaskDto {
+
+    private Long id;
 
     private String title;
 
@@ -27,7 +31,10 @@ public class TaskDto {
 
     private boolean done;
 
+    private List<String> taskSuggested = new ArrayList<>();
+
     public TaskDto(Task entity){
+        id = entity.getId();
         title = entity.getTitle();
         description = entity.getDescription();
         status = entity.getStatus();

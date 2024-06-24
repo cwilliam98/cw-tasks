@@ -1,9 +1,7 @@
 package com.cwilliam.task.manager.controllers;
 
 import com.cwilliam.task.manager.entities.TaskDto;
-import com.cwilliam.task.manager.entities.User;
-import com.cwilliam.task.manager.services.oauth.AuthenticationService;
-import com.cwilliam.task.manager.services.tasks.impl.TaskManagerService;
+import com.cwilliam.task.manager.services.tasks.TaskManager;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -13,6 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @Tag(name = "Task Manager", description = "Task Manager API")
 @RestController
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class TaskManagerController {
 
-    private final TaskManagerService service;
+    private final TaskManager service;
 
     @Operation(
             summary = "Insert a task",
@@ -29,8 +30,10 @@ public class TaskManagerController {
             @ApiResponse(responseCode = "200", description = "successful operation")
     })
     @PostMapping
-    private ResponseEntity<TaskDto> createTask(@RequestBody TaskDto task){
-        return ResponseEntity.ok().body(service.createTask(task));
+    private ResponseEntity<TaskDto> createTask(@RequestBody TaskDto task) {
+        var taskCreated = service.createTask(task);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}").buildAndExpand(taskCreated.getId()).toUri();
+        return ResponseEntity.created(uri).body(taskCreated);
     }
     @Operation(
             summary = "Fetch all tasks",
